@@ -26,6 +26,8 @@ class _TelaInicialState extends State<TelaInicial> {
   String hora = '_______';
   String temp = '_______';
   String desc = '_______';
+  String dataSemana = '_______';
+  String pDia = '_______';
   String uf = '';
 
   viaCep() async {
@@ -45,20 +47,8 @@ class _TelaInicialState extends State<TelaInicial> {
       hora = '${hgTemp['results']['time']}';
       temp = '${hgTemp['results']['temp']}';
       desc = '${hgTemp['results']['description']}';
-    });
-  }
-
-  hgTemp() async {
-    final String urlHgTemp =
-        'https://api.hgbrasil.com/weather?format=json-cors&key=fcbea2bd&city_name$cidade,$uf';
-    Response resp = await get(Uri.parse(urlHgTemp));
-    Map hgTemp = json.decode(resp.body);
-    viaCep();
-    setState(() {
-      data = hgTemp['results']['date'];
-      hora = hgTemp['results']['time'];
-      temp = hgTemp['results']['temp'];
-      desc = hgTemp['results']['description'];
+      dataSemana = '${hgTemp['results']['forecast'][1]['date']}';
+      pDia = '${hgTemp['results']['forecast'][1]['weekday']}';
     });
   }
 
@@ -137,7 +127,47 @@ class _TelaInicialState extends State<TelaInicial> {
                 ),
                 Expanded(
                   child: Column(
-                    children: [],
+                      // children: [Image(image: )],
+                      ),
+                )
+              ],
+            ),
+            Column(
+              children: [
+                Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 700,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        style: BorderStyle.solid,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(child: ColocarTexto(texto: pDia)),
+                        const Expanded(child: ColocarTexto(texto: '-')),
+                        Expanded(child: ColocarTexto(texto: dataSemana)),
+                      ],
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 700,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        style: BorderStyle.solid,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: ColocarTexto(texto: desc),
                   ),
                 )
               ],
